@@ -2,12 +2,13 @@
 Summary:	TinyMCE spellchecker plugin
 Name:		tinymce-spellchecker
 Version:	2.0.2
-Release:	0.1
+Release:	0.3
 License:	LGPL v2
 Group:		Applications/WWW
 Source0:	http://dl.sourceforge.net/tinymce/tinymce_spellchecker_php_%{ver}.zip
 # Source0-md5:	71ea3f554466fed09530a89fb98e6eee
-URL:		http://tinymce.moxiecode.com/
+URL:		http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/spellchecker
+Requires:	tinymce >= 3.1.1-0.2
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -15,32 +16,35 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_webapp		%{name}
 %define		_sysconfdir	%{_webapps}/%{_webapp}
 %define		_appdir		%{_datadir}/%{_webapp}
+%define		_plugindir	%{_datadir}/tinymce/plugins/spellchecker
 
 %description
-Serverside spellchecker plugin, current version only supports PHP with
-pspell or the Google XML service.
+This plugin adds spellchecker functionality to TinyMCE by providing a
+new button that performs a AJAX call to a backend PHP page that uses
+PSpell/ASpell or Google spellchecker.
 
 %prep
 %setup -qc
 mv spellchecker/* .
 cat <<'EOF' > apache.conf
-Alias /%{_webapp} %{_appdir}/htdocs
-<Directory %{_appdir}/htdocs>
+Alias /tinymce/plugins/spellchecker/rpc.php %{_appdir}/rpc.php
+<Directory %{_appdir}>
 	Allow from all
 </Directory>
 EOF
 
 cat > lighttpd.conf <<'EOF'
 alias.url += (
-    "/%{_webapp}" => "%{_appdir}/htdocs",
+    "/tinymce/plugins/spellchecker/rpc.php" => "%{_appdir}/rpc.php",
 )
 EOF
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir}/htdocs}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_appdir},%{_plugindir}}
 
-cp -a editor_plugin.js rpc.php css img $RPM_BUILD_ROOT%{_appdir}/htdocs
+cp -a editor_plugin.js css img $RPM_BUILD_ROOT%{_plugindir}
+cp -a rpc.php $RPM_BUILD_ROOT%{_appdir}
 cp -a classes includes $RPM_BUILD_ROOT%{_appdir}
 cp -a config.php $RPM_BUILD_ROOT%{_sysconfdir}
 cp -a apache.conf $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
@@ -77,3 +81,4 @@ rm -rf $RPM_BUILD_ROOT
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/lighttpd.conf
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.php
 %{_appdir}
+%{_plugindir}
