@@ -2,14 +2,16 @@
 Summary:	TinyMCE spellchecker plugin
 Name:		tinymce-spellchecker
 Version:	2.0.2
-Release:	0.3
+Release:	0.5
 License:	LGPL v2
 Group:		Applications/WWW
 Source0:	http://dl.sourceforge.net/tinymce/tinymce_spellchecker_php_%{ver}.zip
 # Source0-md5:	71ea3f554466fed09530a89fb98e6eee
+Patch0:		%{name}.patch
 URL:		http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/spellchecker
 BuildRequires:	rpmbuild(macros) >= 1.268
-Requires:	tinymce >= 3.1.1-0.2
+BuildRequires:	sed >= 4.0
+Requires:	tinymce >= 3.1.1-0.4
 Requires:	webapps
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -28,8 +30,11 @@ PSpell/ASpell or Google spellchecker.
 %prep
 %setup -qc
 mv spellchecker/* .
+find '(' -name '*.js' -o -name '*.html' -o -name '*.htm' -o -name '*.php' ')' -print0 | xargs -0 sed -i -e 's,\r$,,'
+%patch0 -p1
+
 cat <<'EOF' > apache.conf
-Alias /tinymce/plugins/spellchecker/rpc.php %{_appdir}/rpc.php
+Alias /tiny_mce/plugins/spellchecker/rpc.php %{_appdir}/rpc.php
 <Directory %{_appdir}>
 	Allow from all
 </Directory>
@@ -37,7 +42,7 @@ EOF
 
 cat > lighttpd.conf <<'EOF'
 alias.url += (
-    "/tinymce/plugins/spellchecker/rpc.php" => "%{_appdir}/rpc.php",
+    "/tiny_mce/plugins/spellchecker/rpc.php" => "%{_appdir}/rpc.php",
 )
 EOF
 
