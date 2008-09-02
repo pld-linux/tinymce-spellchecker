@@ -8,7 +8,9 @@ Group:		Applications/WWW
 Source0:	http://dl.sourceforge.net/tinymce/tinymce_spellchecker_php_%{ver}.zip
 # Source0-md5:	71ea3f554466fed09530a89fb98e6eee
 URL:		http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/spellchecker
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	tinymce >= 3.1.1-0.2
+Requires:	webapps
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
