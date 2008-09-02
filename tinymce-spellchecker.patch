@@ -1,0 +1,16 @@
+--- tinymce-spellchecker/includes/general.php~	2008-09-02 15:01:46.000000000 +0300
++++ tinymce-spellchecker/includes/general.php	2008-09-02 15:01:47.890168504 +0300
+@@ -7,12 +7,11 @@
+  * @copyright Copyright © 2007, Moxiecode Systems AB, All rights reserved.
+  */
+ 
+-@error_reporting(E_ALL ^ E_NOTICE);
+ $config = array();
+ 
+ require_once(dirname(__FILE__) . "/../classes/utils/Logger.php");
+ require_once(dirname(__FILE__) . "/../classes/utils/JSON.php");
+-require_once(dirname(__FILE__) . "/../config.php");
++require_once('/etc/webapps/tinymce-spellchecker/config.php');
+ require_once(dirname(__FILE__) . "/../classes/SpellChecker.php");
+ 
+ if (isset($config['general.engine']))
