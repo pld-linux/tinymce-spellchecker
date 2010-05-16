@@ -11,6 +11,7 @@ Patch0:		%{name}.patch
 URL:		http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/spellchecker
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
+BuildRequires:	unzip
 Requires:	tinymce >= 3.1.1-0.4
 Requires:	webapps
 Requires:	webserver(access)
