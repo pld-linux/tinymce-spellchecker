@@ -34,7 +34,7 @@ PSpell/ASpell or Google spellchecker.
 %setup -qc
 mv spellchecker/* .
 find '(' -name '*.js' -o -name '*.html' -o -name '*.htm' -o -name '*.php' ')' -print0 | xargs -0 sed -i -e 's,\r$,,'
-%patch0 -p1
+%patch -P0 -p1
 
 cat <<'EOF' > apache.conf
 Alias /tiny_mce/plugins/spellchecker/rpc.php %{_appdir}/rpc.php
